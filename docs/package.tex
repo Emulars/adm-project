@@ -39,6 +39,7 @@
 
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{listings}
 
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -65,3 +66,19 @@
 \hypersetup{
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
+% Define JSON styling
+\lstdefinelanguage{json}{
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{white},
+    stringstyle=\color{orange},
+    keywordstyle=\color{blue}\bfseries,
+    morekeywords={true,false,null}
+}
