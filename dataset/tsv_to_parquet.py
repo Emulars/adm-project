@@ -1,8 +1,8 @@
 import pandas as pd
 
 # Specify the input TSV file and output Parquet file
-input_tsv = 'Crime-Data-from-2020-to-Present-Cleaned.tsv'
-output_parquet = 'Crime-Data-from-2020-to-Present-Cleaned.parquet'
+input_tsv = 'base/Crime-Data-from-2020-to-Present-Cleaned.tsv'
+output_parquet = 'base/Crime-Data-from-2020-to-Present-Cleaned.parquet'
 
 # Read the TSV file
 df = pd.read_csv(input_tsv, sep='\t')
