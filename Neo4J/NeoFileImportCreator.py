@@ -4,6 +4,9 @@ import pandas as pd
 crime_data = pd.read_parquet("../dataset/CrimeDataSet.parquet")
 police_stations = pd.read_csv("../dataset/Updated_LAPD_Police_Stations.csv")
 
+# Take only half of the data for testing purposes
+crime_data = crime_data.sample(frac=0.005, random_state=42)
+
 # Sanitize street names by removing leading/traling and duplicate whitespaces
 crime_data["Street"] = crime_data["Street"].str.replace(r"\s+", " ", regex=True).str.strip()
 police_stations["LOCATION"] = police_stations["LOCATION"].str.replace(r"\s+", " ", regex=True).str.strip()
@@ -45,7 +48,7 @@ police_station_nodes.to_csv("to_import/PoliceStation.csv", index=False)
 # Create relationships
 
 # CrimeType-INVOLVES->TargetVictim
-crime_involves_victim = crime_data[["CrimeId", "VictimId"]]
+crime_involves_victim = crime_data[crime_data["VictimId"] != "NONE"][["CrimeId", "VictimId"]]
 crime_involves_victim.to_csv("to_import/CrimeType_Involves_TargetVictim.csv", index=False)
 
 # CrimeType-OCCURRED_IN->DistrictName
@@ -58,7 +61,8 @@ crime_occurred_at_street.columns = ["CrimeId", "StreetId", "DateTime"]
 crime_occurred_at_street.to_csv("to_import/CrimeType_OccurredAt_Street.csv", index=False)
 
 # WeaponType-USED->CrimeType
-weapon_used_in_crime = crime_data[["CrimeId", "Weapon"]].merge(weapon_type_nodes, left_on="Weapon", right_on="Name")[["Weapon", "CrimeId"]]
+# If the Weapon is NONE do not create a relationship
+weapon_used_in_crime = crime_data[crime_data["Weapon"] != "NONE"][["CrimeId", "Weapon"]].merge(weapon_type_nodes, left_on="Weapon", right_on="Name")[["Weapon", "CrimeId"]]
 weapon_used_in_crime.to_csv("to_import/WeaponType_Used_CrimeType.csv", index=False)
 
 # Street-LOCATED->PoliceStation
