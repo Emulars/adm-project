@@ -1,0 +1,61 @@
+name,description,query,id,parentId,isFolder
+CLEAN UP,,MATCH (p) DETACH DELETE p,0,,false
+Improved Labels,,"// Add labels to CrimeType nodes
+MATCH (c:CrimeType)
+CALL apoc.create.addLabels(c, [c.Type]) YIELD node
+RETURN node;
+
+// Add labels to WeaponType nodes
+MATCH (w:WeaponType)
+CALL apoc.create.addLabels(w, [w.Type]) YIELD node
+RETURN node;
+
+// Add labels to District nodes
+MATCH (d:District)
+CALL apoc.create.addLabels(d, [d.Name]) YIELD node
+RETURN node;
+
+// Add labels to Street nodes
+MATCH (s:Street)
+CALL apoc.create.addLabels(s, [s.Name]) YIELD node
+RETURN node;
+
+// Add labels to TargetVictim nodes
+MATCH (t:TargetVictim)
+CALL apoc.create.addLabels(t, [t.Ethnicity]) YIELD node
+RETURN node;",1,,false
+Query Before,,,2,,true
+1.,,"// 1. Find all crimes and their type that occurred in a given district and in a given time interval;
+MATCH (c)-[oa:OCCURRED_AT]->(s), (s)-[i:IN]->(d)
+WHERE d:District:Devonshire AND c:CrimeType
+AND oa.DateTime >= datetime(""2020-11-01T00:00:00Z"")
+AND oa.DateTime <= datetime(""2020-11-30T23:59:59Z"")
+RETURN 
+  c.Type AS CrimeType, c.CrimeId AS CrimeId,
+  oa.DateTime AS DateTime,
+  d.Name AS District",3,2,false
+2.,,"// Identify all victims given a crime type;
+MATCH (c)-[:INVOLVES]->(v:TargetVictim)
+WHERE c:CrimeType:ASSAULT
+RETURN v.VictimId AS VictimId, v.Age AS VictimAge, v.Gender AS
+VictimGender, v.Ethnicity AS VictimEthnicity",4,2,false
+3.,,"// Count all crimes involving a certain type of weapon
+MATCH (c)-[:USED]->(w)
+WHERE w:FIREARM
+RETURN COUNT(c) AS CrimeCount",5,2,false
+4.,,"MATCH (c)-[:OCCURRED_IN]->(d:District:Central),
+(c)-[:INVOLVES]->(v:TargetVictim)
+RETURN c.Type AS CrimeType, c.CrimeId AS CrimeId, v.VictimId AS VictimId,
+v.Age AS VictimAge, v.Gender AS VictimGender, v.Ethnicity AS Ethnicity",6,2,false
+5.,,"//Given an ethnicity find all streets in which that ethnicity has experienced crimes, sorting them by the number of crimes.
+MATCH (c)-[:INVOLVES]->(v:TargetVictim:Hispanic),
+(c)-[:OCCURRED_AT]->(s)
+RETURN s.Name AS StreetName, COUNT(c) AS CrimeCount
+ORDER BY CrimeCount DESC",7,2,false
+6.,,"// Find the number of cops and all districts where the Crime (Type) ""Assault"" was done with a weapon of type ""FIREARM"".
+MATCH 
+(c:CrimeType:ASSAULT)-[:OCCURRED_IN]->(d:District),
+(c:CrimeType:ASSAULT)-[:USED]->(w:WeaponType:FIREARM),
+(ps:PoliceStation)-[:LOCATED]->(s:Street),
+(s:Street)-[:IN]->(d:District)
+RETURN DISTINCT d.Name AS DistrictName, ps.NumCops AS NumberOfCops",8,2,false

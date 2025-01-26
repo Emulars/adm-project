@@ -1,7 +1,7 @@
 :param {
   // Define the file path root and the individual file names required for loading.
   // https://neo4j.com/docs/operations-manual/current/configuration/file-locations/
-  file_path_root: 'file:///', // Change this to the folder your script can access the files at.
+  file_path_root: 'https://raw.githubusercontent.com/Emulars/adm-project/refs/heads/main/Neo4J/to_import/', // Change this to the folder your script can access the files at.
   file_0: 'DistrictName.csv',
   file_1: 'TargetVictim.csv',
   file_2: 'CrimeType.csv',
@@ -183,24 +183,24 @@ CALL {
 // Add labels to CrimeType nodes
 MATCH (c:CrimeType)
 CALL apoc.create.addLabels(c, [c.Type]) YIELD node
-RETURN node
+RETURN node;
 
 // Add labels to WeaponType nodes
 MATCH (w:WeaponType)
 CALL apoc.create.addLabels(w, [w.Type]) YIELD node
-RETURN node
+RETURN node;
 
 // Add labels to District nodes
 MATCH (d:District)
 CALL apoc.create.addLabels(d, [d.Name]) YIELD node
-RETURN node
+RETURN node;
 
 // Add labels to Street nodes
 MATCH (s:Street)
 CALL apoc.create.addLabels(s, [s.Name]) YIELD node
-RETURN node
+RETURN node;
 
 // Add labels to TargetVictim nodes
 MATCH (t:TargetVictim)
 CALL apoc.create.addLabels(t, [t.Ethnicity]) YIELD node
-RETURN node
+RETURN node;
