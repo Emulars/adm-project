@@ -5,7 +5,7 @@ crime_data = pd.read_parquet("../dataset/CrimeDataSet.parquet")
 police_stations = pd.read_csv("../dataset/Updated_LAPD_Police_Stations.csv")
 
 # Take only half of the data for testing purposes
-crime_data = crime_data.sample(frac=0.005, random_state=42)
+crime_data = crime_data.sample(frac=0.04, random_state=42)
 
 # Sanitize street names by removing leading/traling and duplicate whitespaces
 crime_data["Street"] = crime_data["Street"].str.replace(r"\s+", " ", regex=True).str.strip()
