@@ -45,6 +45,14 @@
 
 The first step in this process involved retrieving the raw dataset, a comprehensive record of various crimes reported across Los Angeles over the selected time frame. This data, while detailed, contained numerous discrepancies and inconsistencies that needed resolution to ensure its usability. The initial cleaning phase focused on addressing glaring issues such as negative age values, null entries in critical fields, and formatting inconsistencies across columns.
 
+# To import on Neo4J Aura
+
+In the Neo4J Aura [Import Console](https://console-preview.neo4j.io/tools/import)
+1. Click on "Open Model" and select the `Neo4J/neo4j_importer_model_2025-01-26.json` file
+2. Add the Data source files from the folder 'Neo4J/to_import' and click on "Import"
+3. Click the 'Run Import' button 
+4. On the [Query Tool editor](https://console-preview.neo4j.io/tools/query) import the Saved Cypher 'neo4j_query_saved_cypher_2025-1-26.csv'
+5. Run all the queries
 
 # Team members
 - **Andrea Morando** (s4604844@studenti.unige.it)
